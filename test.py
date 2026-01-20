@@ -1,70 +1,44 @@
-import pgzrun
-
+from text import scenes
+import pgzero
+import pygame
 
 WIDTH = 800
 HEIGHT = 450
-rect = Rect(100, 400,50, 50)
-rect2 = Rect(40, 400,50, 50)
-target_speed = 10
-velo_x = 0
-velocity_up = 0
-gravity = 1
-ground = 400
-on_ground = True
+
+scene = 0
 
 def draw():
-    screen.fill((255, 255, 255))
-    screen.clear()
-    screen.draw.filled_rect(rect, "white")
-    screen.draw.filled_rect(rect2, "red")
-    screen.draw.text("x "+str(rect.x), (20, 100))
-    screen.draw.text("y "+str(rect.y), (20, 80))
-    screen.draw.text("jump "+str(on_ground), (20, 60))
-    screen.draw.text("velo x "+str(velo_x), (20, 120))
+    screen.fill((10, 10, 10))
+
+    # Text box
+    screen.draw.filled_rect(
+        Rect(40, HEIGHT - 160, WIDTH - 80, 120),
+        (35, 35, 35)
+    )
+
+    screen.draw.text(
+        scenes[scene],
+        topleft=(60, HEIGHT - 140),
+        width=WIDTH - 120,
+        fontsize=24,
+        color=(230, 230, 230)
+    )
+
+    screen.draw.text(
+        "SPACE",
+        bottomright=(WIDTH - 20, HEIGHT - 10),
+        fontsize=16,
+        color=(150, 150, 150)
+    )
+
+def on_key_down(key):
+    global scene
+    if key == keys.SPACE:
+        scene += 1
+        if scene >= len(scenes):
+            quit()
+
 def update():
-    global velo_x
-    global velocity_up
-    global on_ground
-    collision()
-    move()
-    jump()
-    rect.x += velo_x
-    rect.y += velocity_up
-    velocity_up += gravity
+    pass
 
-    if rect.y > 400:
-        velocity_up = 0
-        rect.y = ground
-
-def move():
-    global velo_x
-    velo_x = 0
-    if keyboard.a:
-        velo_x = -target_speed
-    if keyboard.d:
-        velo_x = target_speed
-def jump():
-    global velocity_up
-    global on_ground
-
-    if keyboard.w and on_ground:
-        velocity_up = -15
-        on_ground = False
-    ground_check()
-    rect.y += velocity_up
-    velocity_up += gravity
-
-def ground_check():
-    global on_ground
-    if rect.y >= ground:
-        on_ground = True
-    else:
-        on_ground = False
-    
-def collision():
-    if rect.colliderect(rect2):
-        rect.x = 90
-
-# Start the game
 pgzrun.go()
-
